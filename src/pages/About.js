@@ -1,32 +1,58 @@
 import { useState, useEffect } from "react";
+import "../index.css"; // Ensure to import your CSS file for styling
 
 function About(props) {
-  // create state to hold about data
   const [about, setAbout] = useState(null);
 
-  // create function to make api call
   const getAboutData = async () => {
-    // make api call and get response
-    const response = await fetch(props.URL + "about");
-    // turn response into javascript object
-    const data = await response.json();
-    // set the about state to the data
-    setAbout(data);
+    try {
+      const response = await fetch(props.URL + "about");
+      const data = await response.json();
+      setAbout(data);
+    } catch (error) {
+      console.error("Error fetching the about data:", error);
+    }
   };
 
-  // make an initial call for the data inside a useEffect, so it only happens once on component load
-  useEffect(() => {getAboutData()}, []);
+  useEffect(() => {
+    getAboutData();
+  }, []);
 
-  // define a function that will return the JSX needed once we get the data
   const loaded = () => (
-    <div>
-      <h2>{about.name}</h2>
-      <h3>{about.email}</h3>
-      <p>{about.bio}</p>
+    <div className="about-container">
+      <img src={about.headshot} alt={about.name} className="about-headshot" />
+      <h2 className="about-name">{about.name}</h2>
+      <h3 className="about-email">{about.email}</h3>
+      <div className="about-bio">
+        <p>{about.bio}</p>
+        <p>
+          I'm an active individual who loves staying engaged with various sports. In my free time, you'll often find me playing golf, tennis, or volleyball. You can also catch me playing spikeball with my friends and family. I also enjoy playing video games, a pastime that allows me to unwind and have fun.
+        </p>
+        <p>
+          I've always been interested in the sciences, and this curiosity naturally extended to the tech industry. The rapid growth and innovation in technology fascinate me, driving me to constantly learn and explore new advancements in the field.
+        </p>
+      </div>
+      <div className="skills-section">
+        <h2>Skills</h2>
+        <ul>
+          <li>JavaScript</li>
+          <li>Python</li>
+          <li>HTML</li>
+          <li>CSS</li>
+          <li>TailwindCSS</li>
+          <li>Django</li>
+          <li>MongoDB</li>
+          <li>SQL</li>
+          <li>React</li>
+          <li>Express</li>
+          <li>Node.js</li>
+          <li>Mongoose</li>
+          <li>VScode</li>
+        </ul>
+      </div>
     </div>
   );
 
-  // if data arrives return the result of loaded, if not, an h1 that says loading
   return about ? loaded() : <h1>Loading...</h1>;
 }
 
